@@ -48,8 +48,7 @@ def generate_report(findings, risk_score):
     return report
 
 
-def save_report(report, filename="audit_report.txt"):
-
+def save_report(report, filename):
     with open(filename, "w", encoding="utf-8") as file:
         file.write(report)
 

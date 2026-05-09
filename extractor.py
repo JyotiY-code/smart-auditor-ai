@@ -1,39 +1,65 @@
+"""
+Hybrid Document Extractor
+Supports:
+1. Normal PDF text extraction
+2. OCR fallback for scanned PDFs
+"""
+
 import os
-from PyPDF2 import PdfReader
+
+import PyPDF2
+import pytesseract
+
+from PIL import Image
+from pdf2image import convert_from_path
+
+
+# Optional:
+# Set Tesseract path manually if needed
+pytesseract.pytesseract.tesseract_cmd = (
+    r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+)
 
 
 def extract_text(file_path):
 
-    # Get absolute path
-    absolute_path = os.path.abspath(file_path)
+    extracted_text = ""
 
-    # Check file exists
-    if not os.path.exists(absolute_path):
-        raise FileNotFoundError(f"File not found: {absolute_path}")
+    try:
 
-    # Get file extension
-    file_extension = file_path.split(".")[-1].lower()
+        # -------- NORMAL PDF EXTRACTION --------
+        with open(file_path, "rb") as file:
 
-    # PDF Extraction
-    if file_extension == "pdf":
+            reader = PyPDF2.PdfReader(file)
 
-        reader = PdfReader(absolute_path)
+            for page in reader.pages:
 
-        text = ""
+                page_text = page.extract_text()
 
-        for page in reader.pages:
-            extracted = page.extract_text()
+                if page_text:
+                    extracted_text += page_text + "\n"
 
-            if extracted:
-                text += extracted + "\n"
+        print("Normal extraction completed.")
 
-        return text
+        # -------- OCR EXTRACTION --------
+        print("Running OCR on document pages...")
 
-    # TXT Extraction
-    elif file_extension == "txt":
+        images = convert_from_path(
+    file_path,
+    poppler_path=r"C:\Users\ashis\Downloads\Release-26.02.0-0\poppler-26.02.0\Library\bin"
+)
+        for image in images:
 
-        with open(absolute_path, "r", encoding="utf-8") as file:
-            return file.read()
+            ocr_text = pytesseract.image_to_string(image)
 
-    else:
-        raise ValueError("Unsupported file type")
+            extracted_text += "\n" + ocr_text
+
+        print("OCR extraction completed.")
+
+        return extracted_text
+
+    except Exception as error:
+
+        print(f"Extraction Error: {error}")
+
+        return ""
