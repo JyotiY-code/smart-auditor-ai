@@ -2,9 +2,9 @@
 ===== SMART AUDIT REPORT =====
 
 Detected Issues:
-1. Critical alert: Possible fraud-related content.
+1. Potential risk detected: fraud
 
-Risk Score: 50/100
+Risk Score: 40/100
 Risk Level: MEDIUM
 
 Summary:

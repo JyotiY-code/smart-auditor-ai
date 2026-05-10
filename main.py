@@ -5,6 +5,7 @@ from analyzer import analyze_text
 from risk_engine import calculate_risk
 from report_generator import generate_report, save_report
 from pdf_report import create_pdf_report
+from nlp_analyzer import nlp_analyze
 
 
 # Folder paths
@@ -40,7 +41,8 @@ if __name__ == "__main__":
             text = extract_text(file_path)
 
             # Analyze text
-            findings = analyze_text(text)
+            # NLP Analyze text
+            findings = nlp_analyze(text)
 
             # Calculate risk
             risk_score = calculate_risk(findings)

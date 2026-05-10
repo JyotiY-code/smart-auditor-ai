@@ -1,6 +1,7 @@
 """
-Risk Engine Module
+Risk Scoring Engine
 """
+
 
 def calculate_risk(findings):
 
@@ -10,23 +11,25 @@ def calculate_risk(findings):
 
         finding = finding.lower()
 
-        if "critical" in finding:
-            risk_score += 50
-
-        elif "missing" in finding:
-            risk_score += 20
-
-        elif "warning" in finding:
-            risk_score += 10
-
-        elif "unauthorized" in finding:
+        if "fraud" in finding:
             risk_score += 40
 
-        elif "error" in finding:
-            risk_score += 15
+        elif "money laundering" in finding:
+            risk_score += 50
 
-    # Maximum limit
-    if risk_score > 100:
-        risk_score = 100
+        elif "corruption" in finding:
+            risk_score += 35
+
+        elif "suspicious" in finding:
+            risk_score += 25
+
+        elif "illegal" in finding:
+            risk_score += 30
+
+        elif "fake" in finding:
+            risk_score += 20
+
+    # Limit max score
+    risk_score = min(risk_score, 100)
 
     return risk_score
